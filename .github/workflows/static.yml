@@ -19,8 +19,14 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - uses: actions/configure-pages@v5
-      - uses: actions/upload-pages-artifact@v3
+      - name: Empacotar página
+        shell: powershell
+        run: tar -cvf "$env:RUNNER_TEMP\artifact.tar" index.html
+      - uses: actions/upload-artifact@v4
         with:
-          path: '.'
+          name: github-pages
+          path: ${{ runner.temp }}/artifact.tar
+          retention-days: 1
+          if-no-files-found: error
       - id: d
         uses: actions/deploy-pages@v4
